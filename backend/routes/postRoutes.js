@@ -11,5 +11,6 @@ import {
 router.get("/posts", auth, getPosts);
 router.post("/posts", auth, createPost);
 router.delete("/posts/:id", auth, deletePost);
+router.put("/posts/:id", auth);
 
 export default router;

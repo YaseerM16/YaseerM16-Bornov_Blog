@@ -11,7 +11,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await api.post("/login", { email, password });
-      localStorage.setItem("token", res.data.token);
+      // console.log();
 
       alert("Login successful");
       navigate("/create"); // or wherever you want to go after login

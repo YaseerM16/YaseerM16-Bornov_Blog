@@ -27,17 +27,38 @@ export const createPost = async (req, res) => {
 };
 
 export const deletePost = async (req, res) => {
-  const post = await Post.findOne({ _id: req.params.id, user: req.user._id });
-  if (!post) return res.status(404).json({ message: "Post not found" });
+  try {
+    const post = await Post.findOne({
+      _id: req.params.id,
+      author: req.user._id,
+    });
+    if (!post) return res.status(404).json({ message: "Post not found" });
 
-  await post.remove();
-  res.json({ message: "Post deleted" });
+    await post.deleteOne(); // Proper way to delete a document
+    res.json({ message: "Post deleted" });
+  } catch (err) {
+    console.error("Error deleting post:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 export const editPost = async (req, res) => {
-  const post = await Post.findOne({ _id: req.params.id, user: req.user._id });
-  if (!post) return res.status(404).json({ message: "Post not found" });
+  try {
+    const { title, content } = req.body;
 
-  await post.remove();
-  res.json({ message: "Post deleted" });
+    const post = await Post.findOneAndUpdate(
+      { _id: req.params.id, author: req.user._id },
+      { title, content },
+      { new: true } // return the updated document
+    );
+
+    if (!post)
+      return res
+        .status(404)
+        .json({ message: "Post not found or unauthorized" });
+
+    res.json(post);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 };

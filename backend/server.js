@@ -17,7 +17,7 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // allow all common HTTP methods
     credentials: true, // if you're using cookies/auth headers
   })
-); //localhost:5173
+);
 
 // Routes
 app.use("/api", authRoutes);

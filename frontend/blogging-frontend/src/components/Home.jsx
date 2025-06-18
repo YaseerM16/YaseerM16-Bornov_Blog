@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api";
 import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -46,6 +47,42 @@ const Home = () => {
     } catch (err) {
       console.log("Error while handlesave: ", err);
       alert(err.response?.data?.message || "Update failed");
+    }
+  };
+
+  const handleDeletePost = async (postId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to delete this post?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const token = Cookies.get("token");
+        await api.delete(`/posts/${postId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Update the posts state to remove the deleted one
+        setPosts((prevPosts) =>
+          prevPosts.filter((post) => post._id !== postId)
+        );
+
+        Swal.fire("Deleted!", "Your post has been deleted.", "success");
+      } catch (err) {
+        Swal.fire(
+          "Error!",
+          err.response?.data?.message || "Delete failed",
+          "error"
+        );
+      }
     }
   };
 

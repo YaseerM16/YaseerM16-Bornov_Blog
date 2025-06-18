@@ -25,8 +25,8 @@ const Home = () => {
   const handleSave = async () => {
     try {
       const token = Cookies.get("token");
-      await api.put(
-        `/posts/${editPostId}`,
+      const response = await api.put(
+        `/edit-post/${editPostId}`,
         { title: editTitle, content: editContent },
         {
           headers: {
@@ -34,10 +34,17 @@ const Home = () => {
           },
         }
       );
+      const updatedPost = response.data;
+
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post._id === updatedPost._id ? updatedPost : post
+        )
+      );
       alert("Post updated");
       setEditPostId(null);
-      fetchPosts(); // or reload posts from API
     } catch (err) {
+      console.log("Error while handlesave: ", err);
       alert(err.response?.data?.message || "Update failed");
     }
   };
@@ -201,6 +208,7 @@ const Home = () => {
                   <button
                     className="text-gray-400 hover:text-red-500 transition-colors"
                     aria-label="Delete post"
+                    onClick={() => handleDeletePost(post._id)}
                   >
                     <svg
                       className="w-5 h-5"

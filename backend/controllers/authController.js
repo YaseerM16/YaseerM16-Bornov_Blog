@@ -2,8 +2,6 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
-  console.log("Itz Hittingh ...!");
-
   const { email, password } = req.body;
   try {
     const user = await User.create({ email, password });
@@ -24,15 +22,22 @@ export const login = async (req, res) => {
       expiresIn: "1d",
     });
 
-    // Set cookie
     res.cookie("token", token, {
-      httpOnly: false, // secure against XSS
-      secure: process.env.NODE_ENV === "production", // only https in prod
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({ message: "Login successful" });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
+};
+
+export const logout = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+  });
+  res.status(200).json({ success: true, message: "Logged out successfully" });
 };

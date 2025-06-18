@@ -3,10 +3,9 @@ import api from "../api";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
-const Home = () => {
+const MyPosts = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [editPostId, setEditPostId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
@@ -271,4 +270,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default MyPosts;

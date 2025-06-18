@@ -2,8 +2,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import CreatePost from "./components/CreatePost";
-import Home from "./components/Home";
+// import Home from "./components/MyPosts";
+
 import ProtectedRoute from "./components/ProtectedRoute";
+import HomeP from "./components/HomeP";
+import MyPosts from "./components/MyPosts";
 
 function App() {
   return (
@@ -13,14 +16,15 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <Home />
+              <HomeP />
             </ProtectedRoute>
           }
         />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/my-posts" element={<MyPosts />} />
         <Route
-          path="/create"
+          path="/create-post"
           element={
             <ProtectedRoute>
               <CreatePost />
